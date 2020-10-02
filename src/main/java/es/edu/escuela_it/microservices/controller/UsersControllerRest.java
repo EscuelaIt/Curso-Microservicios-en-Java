@@ -5,12 +5,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,30 +31,51 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.edu.escuela_it.microservices.model.AccountDTO;
 import es.edu.escuela_it.microservices.model.UserDTO;
+import es.edu.escuela_it.microservices.services.UserService;
+import es.edu.escuela_it.microservices.services.UserServiceImpl;
+import es.edu.escuela_it.microservices.validators.GroupValidatorOnCreate;
+import es.edu.escuela_it.microservices.validators.GroupValidatorOnUpdate;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/users")
+@Api(tags = "User API Rest")
 public class UsersControllerRest {
 
+	@Autowired
+	private UserService userService;
+
 	@GetMapping("/{id}")
-	public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
+	@ApiOperation(notes = "Retrieve one user system by id", value = "Get user by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Response ok if the operation was successful"),
+			@ApiResponse(code = 404, message = "Response not found if the resource could not be found") })
+	public ResponseEntity<UserDTO> getUserById(
+			@ApiParam(example = "1", value = "Identifier for User", allowableValues = "1,2,3,4", required = true) @PathVariable Integer id) {
 
 		System.out.println("Recovery user by id");
 
-		UserDTO userDTO = new UserDTO(1, "Rafael");
-		userDTO.setEdad(38);
-		userDTO.setLastname("Benedettelli");
+		Optional<UserDTO> optUserDTO = userService.getUserById(id);
 
-		Link withSelfRel = linkTo(methodOn(UsersControllerRest.class).getUserById(userDTO.getId())).withSelfRel();
-		userDTO.add(withSelfRel);
+		try {
 
-		if (userDTO == null) {
+			UserDTO userDTO = optUserDTO.orElseThrow(NoSuchElementException::new);
+			
+			Link withSelfRel = linkTo(methodOn(UsersControllerRest.class).getUserById(userDTO.getId())).withSelfRel();
+			userDTO.add(withSelfRel);
+
+			return ResponseEntity.ok(userDTO);
+
+		} catch (NoSuchElementException e) {
 
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(userDTO);
 	}
+
 
 	@GetMapping
 	public ResponseEntity<CollectionModel<UserDTO>> listAllUsers(@RequestParam(required = false) String name,
@@ -66,17 +94,19 @@ public class UsersControllerRest {
 
 		}
 
+		if (name != null) {
+			list = list.stream().filter(u -> u.getName().contains(name)).collect(Collectors.toList());
+		}
+
 		Link link = linkTo(methodOn(UsersControllerRest.class).listAllUsers("", "", 0)).withSelfRel();
 		CollectionModel<UserDTO> result = CollectionModel.of(list, link);
 		return ResponseEntity.ok(result);
 
-		// list = list.stream().filter(u ->
-		// u.getName().contains(name)).collect(Collectors.toList());
-
 	}
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userDTO) {
+	public ResponseEntity<String> createUser(
+			@Validated(value = GroupValidatorOnCreate.class) @RequestBody UserDTO userDTO) {
 
 		System.out.println("Creating user " + userDTO.getName());
 
@@ -87,7 +117,8 @@ public class UsersControllerRest {
 	}
 
 	@PutMapping
-	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<UserDTO> updateUser(
+			@Validated(value = GroupValidatorOnUpdate.class) @RequestBody UserDTO userDTO) {
 
 		System.out.println("updating data");
 

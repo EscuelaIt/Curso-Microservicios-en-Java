@@ -1,0 +1,337 @@
+swagger: '2.0'
+info:
+  description: Microservice
+  version: '1.0'
+  title: EscuelaIT
+  termsOfService: 'http://escuelait.com'
+  contact:
+    name: Rafael Benedettelli
+    url: escuelait.com
+    email: escuelait@gmail.com
+  license:
+    name: Uso exclusivo EscuelaIT
+    url: 'http://anfix.com'
+host: 'localhost:8080'
+basePath: /escuelait/api/v2/microservices
+tags:
+  - name: hola-mundo-rest
+    description: Hola Mundo Rest
+  - name: users-controller-rest
+    description: Users Controller Rest
+paths:
+  /holaMundo:
+    get:
+      tags:
+        - hola-mundo-rest
+      summary: saludo
+      operationId: saludoUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /users:
+    get:
+      tags:
+        - users-controller-rest
+      summary: listAllUsers
+      operationId: listAllUsersUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: age
+          in: query
+          description: age
+          required: false
+          type: integer
+          format: int32
+        - name: lastName
+          in: query
+          description: lastName
+          required: false
+          type: string
+        - name: name
+          in: query
+          description: name
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CollectionModel«UserDTO»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    post:
+      tags:
+        - users-controller-rest
+      summary: createUser
+      operationId: createUserUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: userDTO
+          description: userDTO
+          required: true
+          schema:
+            $ref: '#/definitions/UserDTO'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    put:
+      tags:
+        - users-controller-rest
+      summary: updateUser
+      operationId: updateUserUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: userDTO
+          description: userDTO
+          required: true
+          schema:
+            $ref: '#/definitions/UserDTO'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserDTO'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  '/users/{id}':
+    get:
+      tags:
+        - users-controller-rest
+      summary: getUserById
+      operationId: getUserByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    delete:
+      tags:
+        - users-controller-rest
+      summary: deleteUser
+      operationId: deleteUserUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      deprecated: false
+  '/users/{id}/accounts':
+    get:
+      tags:
+        - users-controller-rest
+      summary: getUserAccounts
+      operationId: getUserAccountsUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccountDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  '/users/{id}/accounts/{idAccount}':
+    get:
+      tags:
+        - users-controller-rest
+      summary: getUserAccountById
+      operationId: getUserAccountByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int32
+        - name: idAccount
+          in: path
+          description: idAccount
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AccountDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+definitions:
+  AccountDTO:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+    title: AccountDTO
+  CollectionModel«UserDTO»:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/UserDTO'
+      links:
+        $ref: '#/definitions/Links'
+    title: CollectionModel«UserDTO»
+  Link:
+    type: object
+    properties:
+      deprecation:
+        type: string
+      href:
+        type: string
+      hreflang:
+        type: string
+      media:
+        type: string
+      name:
+        type: string
+      profile:
+        type: string
+      rel:
+        $ref: '#/definitions/LinkRelation'
+      template:
+        $ref: '#/definitions/UriTemplate'
+      templated:
+        type: boolean
+      title:
+        type: string
+      type:
+        type: string
+    title: Link
+  LinkRelation:
+    type: object
+    title: LinkRelation
+  Links:
+    type: object
+    properties:
+      empty:
+        type: boolean
+    title: Links
+  TemplateVariables:
+    type: object
+    title: TemplateVariables
+  UriTemplate:
+    type: object
+    properties:
+      variableNames:
+        type: array
+        items:
+          type: string
+      variables:
+        $ref: '#/definitions/TemplateVariables'
+    title: UriTemplate
+  UserDTO:
+    type: object
+    properties:
+      edad:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      lastname:
+        type: string
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/Link'
+      name:
+        type: string
+    title: UserDTO
