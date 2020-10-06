@@ -1,5 +1,6 @@
 package es.edu.escuela_it.microservices.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,24 @@ public class UserServiceCloudImpl implements UserService{
 		UserDTO userDTO = userClient.getUser(id);
 		
 		return null;
+	}
+
+	@Override
+	public List<UserDTO> listAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDTO saveUser(UserDTO userDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

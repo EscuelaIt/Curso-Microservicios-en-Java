@@ -81,7 +81,7 @@ public class UsersControllerRest {
 	public ResponseEntity<CollectionModel<UserDTO>> listAllUsers(@RequestParam(required = false) String name,
 			@RequestParam(required = false) String lastName, @RequestParam(required = false) Integer age) {
 
-		List<UserDTO> list = List.of(new UserDTO(1, "Rafael"), new UserDTO(2, "Miguel"), new UserDTO(3, "Alvaro"));
+		List<UserDTO> list = userService.listAllUsers();
 
 		for (UserDTO userDTO : list) {
 
@@ -109,6 +109,8 @@ public class UsersControllerRest {
 			@Validated(value = GroupValidatorOnCreate.class) @RequestBody UserDTO userDTO) {
 
 		System.out.println("Creating user " + userDTO.getName());
+		
+		userDTO = userService.saveUser(userDTO);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDTO.getId())
 				.toUri();
@@ -133,6 +135,8 @@ public class UsersControllerRest {
 	public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
 
 		System.out.println("delete user by id");
+		
+		userService.deleteById(id);
 
 		return ResponseEntity.ok(null);
 

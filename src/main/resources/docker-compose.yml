@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  postgres9:
+    image: postgres:9.6.12
+    container_name: database_postgres
+    volumes:
+      - data:/opt/microservices/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: microservices 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+
+volumes:
+  data: {}

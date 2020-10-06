@@ -1,0 +1,5 @@
+18:58:05.375 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:58:05.628 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/escuelait/api/v2/microservices'
+18:58:05.631 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+18:58:05.757 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+18:58:05.905 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
