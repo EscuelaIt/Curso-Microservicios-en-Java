@@ -3,10 +3,6 @@ package es.edu.escuela_it.microservices.model;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
@@ -38,14 +34,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ApiModel(description = "System user")
-@Entity(name = "ms_users")
 public class UserDTO extends RepresentationModel<UserDTO> {
 
 	@NonNull
 	@NotNull
 	@ApiModelProperty(notes = "Unique identifier of the User.", example = "1", required = true, position = 0)
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 
 	@NonNull

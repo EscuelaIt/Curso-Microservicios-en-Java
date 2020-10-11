@@ -1,4 +1,4 @@
-package es.edu.escuela_it.microservices.configuration;
+package es.edu.escuela_it.microservices.configurations;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;

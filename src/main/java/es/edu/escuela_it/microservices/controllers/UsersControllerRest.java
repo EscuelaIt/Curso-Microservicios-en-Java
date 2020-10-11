@@ -1,4 +1,4 @@
-package es.edu.escuela_it.microservices.controller;
+package es.edu.escuela_it.microservices.controllers;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -7,13 +7,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import es.edu.escuela_it.microservices.model.AccountDTO;
 import es.edu.escuela_it.microservices.model.UserDTO;
 import es.edu.escuela_it.microservices.services.UserService;
-import es.edu.escuela_it.microservices.services.UserServiceImpl;
 import es.edu.escuela_it.microservices.validators.GroupValidatorOnCreate;
 import es.edu.escuela_it.microservices.validators.GroupValidatorOnUpdate;
 import io.swagger.annotations.Api;
@@ -63,7 +61,7 @@ public class UsersControllerRest {
 		try {
 
 			UserDTO userDTO = optUserDTO.orElseThrow(NoSuchElementException::new);
-			
+
 			Link withSelfRel = linkTo(methodOn(UsersControllerRest.class).getUserById(userDTO.getId())).withSelfRel();
 			userDTO.add(withSelfRel);
 
@@ -76,12 +74,12 @@ public class UsersControllerRest {
 
 	}
 
-
 	@GetMapping
 	public ResponseEntity<CollectionModel<UserDTO>> listAllUsers(@RequestParam(required = false) String name,
-			@RequestParam(required = false) String lastName, @RequestParam(required = false) Integer age) {
+			@RequestParam(required = false) String lastName, @RequestParam(required = false) Integer age,
+			@PageableDefault(size = 3, sort = { "edad", "name" }, direction = Direction.ASC) Pageable pageable) {
 
-		List<UserDTO> list = userService.listAllUsers();
+		List<UserDTO> list = userService.listAllUsers(pageable);
 
 		for (UserDTO userDTO : list) {
 
@@ -98,7 +96,7 @@ public class UsersControllerRest {
 			list = list.stream().filter(u -> u.getName().contains(name)).collect(Collectors.toList());
 		}
 
-		Link link = linkTo(methodOn(UsersControllerRest.class).listAllUsers("", "", 0)).withSelfRel();
+		Link link = linkTo(methodOn(UsersControllerRest.class).listAllUsers("", "", 0,pageable)).withSelfRel();
 		CollectionModel<UserDTO> result = CollectionModel.of(list, link);
 		return ResponseEntity.ok(result);
 
@@ -109,7 +107,7 @@ public class UsersControllerRest {
 			@Validated(value = GroupValidatorOnCreate.class) @RequestBody UserDTO userDTO) {
 
 		System.out.println("Creating user " + userDTO.getName());
-		
+
 		userDTO = userService.saveUser(userDTO);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDTO.getId())
@@ -135,7 +133,7 @@ public class UsersControllerRest {
 	public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
 
 		System.out.println("delete user by id");
-		
+
 		userService.deleteById(id);
 
 		return ResponseEntity.ok(null);

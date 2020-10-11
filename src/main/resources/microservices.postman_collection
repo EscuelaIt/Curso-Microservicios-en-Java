@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "0cdb05e8-783f-45ff-b5f4-1641b60209b0",
+		"name": "Escuela IT Microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "GET User By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "lang",
+								"value": "{{lang}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{api}}/users/1",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET HolaMundo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "lang",
+								"value": "{{lang}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{api}}/holaMundo/jesus",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"holaMundo",
+								"jesus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET User Accounts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "lang",
+								"type": "text",
+								"value": "{{lang}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{api}}/users/1/accounts",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET User Accounts by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "lang",
+								"type": "text",
+								"value": "{{lang}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{api}}/users/1/accounts",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users?size=10",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Rafael\",\r\n    \"lastname\": \"asdfadsffdsa\",\r\n    \"edad\": 22,\r\n    \"birthDay\":\"1982-01-19\",\r\n    \"email\":\"rblbene@gmai.com\",\r\n    \"active\":true,\r\n    \"cif\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Users",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Rafael\",\r\n    \"lastname\": \"asdfadsffdsa\",\r\n    \"edad\": 20,\r\n    \"birthDay\":\"1982-01-19\",\r\n    \"email\":\"rblbenegmai.com\",\r\n    \"active\":true,\r\n    \"cif\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Rafael\",\r\n    \"lastname\": \"Bene\",\r\n    \"edad\": 38\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users/1",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

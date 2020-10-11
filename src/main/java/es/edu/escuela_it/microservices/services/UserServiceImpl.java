@@ -3,12 +3,15 @@ package es.edu.escuela_it.microservices.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import es.edu.escuela_it.microservices.dao.entities.UserEntity;
 import es.edu.escuela_it.microservices.dao.repositories.UserRepository;
+import es.edu.escuela_it.microservices.mappers.UserMapper;
 import es.edu.escuela_it.microservices.model.UserDTO;
 
 
@@ -17,29 +20,51 @@ import es.edu.escuela_it.microservices.model.UserDTO;
 @ConditionalOnProperty(prefix = "app",name = "edition",havingValue = "Community")
 public class UserServiceImpl implements UserService {
 	
-	@Autowired
+	private UserMapper userMapper;
+	
 	private UserRepository userRepository;
+	
+	public UserServiceImpl(UserRepository userRepository,UserMapper userMapper) {
+		
+		this.userRepository = userRepository;
+		this.userMapper = userMapper;
+
+	}
 	
 	public Optional<UserDTO> getUserById(Integer id) {
 		
-		Optional<UserDTO> userDTO = userRepository.findById(id);
+		Optional<UserEntity> userOptional = userRepository.findById(id);
 		
-		return userDTO;
+		if (userOptional.isPresent()) {
+			UserEntity userEntity = userOptional.get();
+			UserDTO userDTO = userMapper.getUserDTO(userEntity);
+			return Optional.of(userDTO);
+		}
+		
+		return Optional.empty();
 
 	}
 
 	@Override
-	public List<UserDTO> listAllUsers() {
+	public List<UserDTO> listAllUsers(Pageable pageable) {
 		
-		List<UserDTO> users = userRepository.findAll();
+		 Page<UserEntity> usersEntitiesPage = userRepository.findAll(pageable);
+		 List<UserEntity> userEntititesList = usersEntitiesPage.getContent();
+		 List<UserDTO> usersDtos = userMapper.getUsersDtos(userEntititesList);
+		 
+		 //Minima logica de negocios. 
+		 //Esta logica es la que se somete a testing en UserServiceImplTest
+		 usersDtos.forEach(user -> user.setTitle("Developer " + user.getName()));
 		
-		return users;
+		return usersDtos;
 	}
 
 	@Override
 	public UserDTO saveUser(UserDTO userDTO) {
 		
-		userDTO = userRepository.save(userDTO);
+		UserEntity userEntity = userMapper.getUserEntity(userDTO);
+		userEntity = userRepository.save(userEntity);
+		
 		return userDTO;
 	}
 

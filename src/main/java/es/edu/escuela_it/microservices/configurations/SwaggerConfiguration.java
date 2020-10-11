@@ -1,4 +1,4 @@
-package es.edu.escuela_it.microservices.configuration;
+package es.edu.escuela_it.microservices.configurations;
 
 import java.util.Collections;
 
