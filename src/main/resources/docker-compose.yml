@@ -1,8 +1,16 @@
 version: '3'
 
 services:
+  app:
+    image: registry.gitlab.com/veronikait/microservice-pcftubol-core:latest
+    container_name: app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres9
+      
   postgres9:
-    image: postgres:9.6.12
+    image: postgres:latest
     container_name: database_postgres
     volumes:
       - data:/opt/microservices/data

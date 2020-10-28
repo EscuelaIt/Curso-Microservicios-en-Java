@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,6 +28,7 @@ import es.edu.escuela_it.microservices.model.UserDTO;
 import es.edu.escuela_it.microservices.services.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
+@Disabled
 @DisplayName("Test userController : Controller Layer")
 @WebMvcTest(UsersControllerRest.class)
 @Import(ConfigHatoeasTest.class)

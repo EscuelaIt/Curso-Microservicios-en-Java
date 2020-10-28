@@ -10,10 +10,10 @@ import org.springframework.hateoas.client.LinkDiscoverers;
 import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
 import org.springframework.plugin.core.SimplePluginRegistry;
 
-@Configuration
+//@Configuration
 public class ConfigHatoeasTest {
 
-	@Bean
+	//@Bean
 	public LinkDiscoverers discoverers() {
 		
 		List<LinkDiscoverer> plugins = new ArrayList<>();
